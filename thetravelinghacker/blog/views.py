@@ -4,7 +4,7 @@ from thetravelinghacker.blog.models import Post
 
 
 def home(request):
-    blog_posts = Post.objects.all()[:5]
+    blog_posts = Post.objects.all().order_by('-timestamp')[:5]
     content = {'blog_posts': blog_posts}
     return render_to_response('index.html', content)
 
