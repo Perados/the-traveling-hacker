@@ -173,14 +173,14 @@ hr.small {
   font-weight: 300;
   margin: 10px 0 0;
   background-color: rgba(94, 89, 89, 0.4);
-  border-radius: 20px;
+  border-radius: 14px;
 }
 @media only screen and (min-width: 768px) {
   .intro-header .site-heading h1,
   .intro-header .page-heading h1 {
     font-size: 80px;
     background-color: rgba(94, 89, 89, 0.4);
-    border-radius: 20px;
+    border-radius: 14px;
   }
 }
 .intro-header .post-heading h1 {
