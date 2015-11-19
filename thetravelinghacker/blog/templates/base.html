@@ -89,18 +89,22 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 {% block content %}
-                    {% for blog_post in blog_posts %}
-                        <div class="pos t-preview">
-                            <a href={{ blog_post.url }}>
+                    {% for post in posts %}
+                        <div class="post-preview">
+                            <a href="{% url 'posts' post.id %}">
                                 <h2 class="post-title">
-                                    {{ blog_post.title }}
+                                    {{ post.title }}
                                 </h2>
                                 <h3 class="post-subtitle">
-                                    {{ blog_post.subtitle }}
+                                    {{ post.subtitle }}
                                 </h3>
                             </a>
-                            <p>{{ blog_post.body_text|markdown }}</p>
-                            <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ blog_post.author }}</a> on {{ blog_post.timestamp }}</p>
+                            <p>
+                                {{ post.body_text|markdown|truncatewords:50 }}
+                                <a href="{% url 'posts' post.id %}" class="read-full-article">Read full article</a>
+                            </p>
+
+                            <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
                         </div>
                         <hr>
                     {% endfor %}
@@ -124,7 +128,23 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <ul class="list-inline text-center">
                         <li>
-                            <a href="#">
+                            <a href="https://th.linkedin.com/in/diegomoracespedes">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/Perados">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/dmoraces">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
@@ -132,7 +152,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="https://www.facebook.com/mora.cespedes.diego">
                                 <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
                                     <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -140,12 +160,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
                         </li>
                     </ul>
                     <p class="copyright text-muted">The Traveling Hacker 2015</p>

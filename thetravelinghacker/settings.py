@@ -26,6 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DISQUS_API_KEY = 'FOOBARFOOBARFOOBARFOOBARFOOBARF'
+DISQUS_WEBSITE_SHORTNAME = 'foobar'
+
 
 # Application definition
 
@@ -40,6 +43,7 @@ INSTALLED_APPS = (
     'thetravelinghacker.blog',
     'django_extensions',
     'django_markdown',
+    'disqus',
 )
 
 MIDDLEWARE_CLASSES = (

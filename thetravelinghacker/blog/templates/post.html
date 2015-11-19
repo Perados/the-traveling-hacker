@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load django_markdown %}
+
+{% block title %}The Traveling Hacker - {{ post.title }}{% endblock %}
+
+{% block background %} '../static/blog/img/home-background.jpg' {% endblock %}
+
+{% block content %}
+        <div>
+            <a>
+                <h2 class="post-title">
+                    {{ post.title }}
+                </h2>
+                <h3 class="post-subtitle">
+                    {{ post.subtitle }}
+                </h3>
+            </a>
+            <p>
+                {{ post.body_text|markdown }}
+            </p>
+
+            <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
+        </div>
+        <hr>
+    <!-- Pager -->
+    <ul class="pager">
+        <li class="next">
+            <a href="#">Older Posts</a>
+        </li>
+    </ul>
+{% endblock %}
+
+

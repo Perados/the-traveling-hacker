@@ -16,6 +16,14 @@ p {
 p a {
   text-decoration: underline;
 }
+
+.read-full-article {
+  text-align: right;
+  text-decoration: none;
+  color: #269abc;
+  display: block;
+}
+
 h1,
 h2,
 h3,

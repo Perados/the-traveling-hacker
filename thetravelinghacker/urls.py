@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'thetravelinghacker.blog.views.home', name='home'),
     url(r'^about-me$', 'thetravelinghacker.blog.views.about_me', name='about_me'),
-    url(r'^posts$', 'thetravelinghacker.blog.views.posts', name='posts'),
+    url(r'^posts/(?P<post_id>[0-9]+)$', 'thetravelinghacker.blog.views.posts', name='posts'),
     url(r'^contact$', 'thetravelinghacker.blog.views.contact', name='contact'),
     url(r'^markdown/', include('django_markdown.urls')),
 ]
