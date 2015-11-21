@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% load django_markdown %}
+{% load disqus_tags %}
 
 {% block title %}The Traveling Hacker - {{ post.title }}{% endblock %}
 
@@ -21,6 +22,7 @@
             </p>
 
             <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
+            <p>{% disqus_show_comments %}</p>
         </div>
         <hr>
     <!-- Pager -->

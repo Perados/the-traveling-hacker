@@ -26,9 +26,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-DISQUS_API_KEY = 'FOOBARFOOBARFOOBARFOOBARFOOBARF'
-DISQUS_WEBSITE_SHORTNAME = 'foobar'
-
 
 # Application definition
 
@@ -39,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'thetravelinghacker.blog',
     'django_extensions',
