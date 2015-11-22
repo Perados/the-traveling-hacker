@@ -3,6 +3,17 @@
 {% load django_markdown %}
 {% load disqus_tags %}
 
+{% block header %}
+    <script type="text/javascript" src="../static/blog/js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+    <link rel="stylesheet" href="../static/blog/js/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="../static/blog/js/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".fancybox").fancybox();
+        });
+    </script>
+{% endblock %}
+
 {% block title %}The Traveling Hacker - {{ post.title }}{% endblock %}
 
 {% block background %} '../static/blog/img/home-background.jpg' {% endblock %}
@@ -23,6 +34,7 @@
 
             <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
             <p>{% disqus_show_comments %}</p>
+
         </div>
         <hr>
     <!-- Pager -->
