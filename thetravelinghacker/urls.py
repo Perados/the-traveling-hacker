@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^about-me$', 'thetravelinghacker.blog.views.about_me', name='about_me'),
     url(r'^posts/(?P<post_id>[0-9]+)$', 'thetravelinghacker.blog.views.posts', name='posts'),
     url(r'^contact$', 'thetravelinghacker.blog.views.contact', name='contact'),
+    url(r'^presentations/utbm$', 'thetravelinghacker.presentations.views.utbm', name='utbm'),
     url(r'^send-contact-mail', 'thetravelinghacker.blog.views.send_contact_mail', name='send_contact_mail'),
     url(r'^markdown/', include('django_markdown.urls')),
 ]
