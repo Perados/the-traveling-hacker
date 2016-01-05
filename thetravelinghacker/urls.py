@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from thetravelinghacker.blog.models import Post
 
 admin.autodiscover()
 
@@ -28,3 +29,14 @@ urlpatterns = [
     url(r'^send-contact-mail', 'thetravelinghacker.blog.views.send_contact_mail', name='send_contact_mail'),
     url(r'^markdown/', include('django_markdown.urls')),
 ]
+
+for post in Post.objects.all():
+    urlpatterns.append(
+        url(
+            r'^{}'.format(post.title.replace(' ', '-').lower(), 'thetravelinghacker,blog.views.posts', name='posts'),
+            'thetravelinghacker.blog.views.posts',
+            {'post': post},
+            name='posts',
+        )
+    )
+

@@ -15,8 +15,10 @@ def about_me(request):
     return render_to_response('about-me.html')
 
 
-def posts(request, post_id):
-    post = Post.objects.get(id=post_id)
+def posts(request, post_id=None, post=None):
+    if post_id:
+        post = Post.objects.get(id=post_id)
+
     return render_to_response('post.html', {'post': post})
 
 
