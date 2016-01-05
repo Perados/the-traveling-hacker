@@ -41,12 +41,12 @@
     <ul class="pager">
         <li class="previous">
             {% if previous_post %}
-                <a href="{% url 'posts' previous_post.id %}">Previous article</a>
+                <a href="{% url 'posts' previous_post.id %}">Previous post</a>
             {% endif %}
         </li>
         <li class="next">
             {% if next_post %}
-                <a href="{% url 'posts' next_post.id %}">Next article</a>
+                <a href="{% url 'posts' next_post.id %}">Next post</a>
             {% endif %}
         </li>
     </ul>

@@ -116,7 +116,7 @@
                             </a>
                             <p>
                                 {{ post.body_text|markdown|truncatewords:50 }}
-                                <a href="{% url 'posts' post.id %}" class="read-full-article">Read full article</a>
+                                <a href="{% url 'posts' post.id %}" class="read-full-post">Read full post</a>
                             </p>
 
                             <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
@@ -126,7 +126,7 @@
                     <!-- Pager -->
                     <ul class="pager">
                         <li class="next">
-                            <a href="#">Older articles</a>
+                            <a href="#">Older posts</a>
                         </li>
                     </ul>
                 {% endblock %}
