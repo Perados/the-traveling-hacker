@@ -39,8 +39,15 @@
         <hr>
     <!-- Pager -->
     <ul class="pager">
+        <li class="previous">
+            {% if previous_post %}
+                <a href="{% url 'posts' previous_post.id %}">Previous article</a>
+            {% endif %}
+        </li>
         <li class="next">
-            <a href="#">Older Posts</a>
+            {% if next_post %}
+                <a href="{% url 'posts' next_post.id %}">Next article</a>
+            {% endif %}
         </li>
     </ul>
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -17,9 +18,23 @@ def about_me(request):
 
 def posts(request, post_id=None, post=None):
     if post_id:
-        post = Post.objects.get(id=post_id)
+        try:
+            post = Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            return redirect('/')
+        return redirect('/{}'.format(post.title.replace(' ', '-').lower()))
 
-    return render_to_response('post.html', {'post': post})
+    try:
+        previous_post = Post.objects.get(id=post.id-1)
+    except Post.DoesNotExist:
+        previous_post = None
+
+    try:
+        next_post = Post.objects.get(id=post.id+1)
+    except Post.DoesNotExist:
+        next_post = None
+
+    return render_to_response('post.html', {'post': post, 'previous_post': previous_post, 'next_post': next_post})
 
 
 def contact(request):
