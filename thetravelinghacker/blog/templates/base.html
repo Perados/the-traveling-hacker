@@ -85,7 +85,16 @@
 
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url({% block background %}'{% static "blog/img/home-background.jpg" %}'{% endblock %})">
+    <header class="intro-header" >
+        <div id="carousel-example-generic" class="carousel slide fill" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner fill" role="listbox">
+                {% for i in 'xxxxxxxxxxxx' %}
+                    <div class="item fill {% if forloop.counter == 1 %}active{% endif %}" style="background-image: url('../static/blog/img/{% block backgrounds %}home{% endblock %}-backgrounds/{{ forloop.counter }}.jpg')">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
