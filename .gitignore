@@ -1,5 +1,6 @@
 # Project files
 settings_secret.py
+thetravelinghacker/logs.txt
 
 # Output files of trans tags
 *.pot
