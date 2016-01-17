@@ -3,7 +3,11 @@ from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.http import HttpResponse
+
 from thetravelinghacker.blog.models import Post
+from thetravelinghacker.blog.models import Reader
+
+from thetravelinghacker.blog.forms import EmailForm
 
 
 def home(request):
@@ -34,7 +38,9 @@ def posts(request, post_id=None, post=None):
     except Post.DoesNotExist:
         next_post = None
 
-    return render_to_response('post.html', {'post': post, 'previous_post': previous_post, 'next_post': next_post})
+    form = EmailForm()
+
+    return render_to_response('post.html', {'post': post, 'previous_post': previous_post, 'next_post': next_post, 'form': form})
 
 
 def contact(request):
@@ -51,6 +57,24 @@ def send_contact_mail(request):
         send_mail(
             subject,
             message,
+            email,
+            ['d.moracespedes@gmail.com'],
+        )
+        return HttpResponse()
+
+
+@csrf_exempt
+def subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        Reader.objects.create(email=email)
+
+        subject = '[The Traveling Hacker] {} just subscribed'.format(email)
+
+        send_mail(
+            subject,
+            subject,
             email,
             ['d.moracespedes@gmail.com'],
         )

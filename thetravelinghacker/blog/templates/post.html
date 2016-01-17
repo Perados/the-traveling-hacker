@@ -33,6 +33,29 @@
             </p>
 
             <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="thumbnail center well well-small text-center" style="
+            background-color: rgb(0, 205, 252);
+        ">
+                        <h2>Subscribe!</h2>
+                        <h4>So you like traveling? Hacking? Squirrels? Subscribe to my newsletter!</h4>
+                        <br>
+                        <form id="subscribeForm" onsubmit="subscribe(this); return false;">
+                            <div class="form-group col-lg-offset-3 col-lg-6 controls">
+                                <input type="email" class="form-control" placeholder="Email Address" name="email" id="email" required data-validation-required-message="Please enter your email address.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <br>
+                            <input type="submit" value="Subscribe Now!" class="btn btn-large">
+                        </form>
+                    </div>
+                    <p class="help-block text-danger"></p>
+                    <div id="success"></div>
+                </div>
+            </div>
+
             <p>{% disqus_show_comments %}</p>
 
         </div>

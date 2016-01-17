@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^contact$', 'thetravelinghacker.blog.views.contact', name='contact'),
     url(r'^presentations/utbm$', 'thetravelinghacker.presentations.views.utbm', name='utbm'),
     url(r'^send-contact-mail', 'thetravelinghacker.blog.views.send_contact_mail', name='send_contact_mail'),
+    url(r'^subscribe', 'thetravelinghacker.blog.views.subscribe', name='subscribe'),
     url(r'^markdown/', include('django_markdown.urls')),
 ]
 
