@@ -1,0 +1,81 @@
+Augmented Reality and Virtual Reality are here to stay
+Creating an Augmented Reality app with embedded video for the Google Cardboard using the Vuforia SDK
+
+
+book's Oculus Rift is already available for pre-order at [Oculus's website](https://www.oculus.com) since last week. However, the price is way higher than what people were expecting: **$599.00**. Honestly, I do not think I will pay the price, even though I would love to have one. I would like to know what makes it so expensive tough, because Google is doing amazing things with the [Google Cardboard](https://www.google.com/get/cardboard/), which you can buy for less than **$20.00** and use your smartphone as its engine. Now, the Oculus Rift is only for [Virtual Reality](https://en.wikipedia.org/wiki/Virtual_reality), but you can do both Virtual and [Augmented Reality](https://en.wikipedia.org/wiki/Augmented_reality) with the Google Cardboard, and it is not that difficult to make apps for it. You don't believe me? Then keep reading.
+
+I played with a Google Cardboard for the first time last year. It was my first time experiencing Virtual Reality, and I can say I was very impressed: I visited the [outer space](https://play.google.com/store/apps/details?id=com.drashvr.titansofspacecb&hl=en), hopped on a [roller coaster](https://play.google.com/store/apps/details?id=com.frag.vrrollercoaster&hl=en) and saw [some dinosaurs](https://play.google.com/store/apps/details?id=com.lunagames.jurassicvr&hl=en), and all that without leaving my office. This year, in order to get my last credits for my Master's degree in Computer Science, my teacher let me work on a project of my choice, and I wanted to have fun and learn some awesome technologies, so I decided to make a Virtual Reality app at first, maybe a game or something like that. However, after seeing how incredible [Pokémon Go](http://www.pokemon.com/us/pokemon-video-games/pokemon-go/) game will be, I decided to switch to Augmented Reality and bought a Google Cardboard with a hole for the camera in the front:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/google-cardboard.jpg">
+    <img  src="../static/blog/img/posts/3/google-cardboard.jpg">
+</a>
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/2sj2iQyBTQs' frameborder='0' allowfullscreen></iframe></div>
+
+I started playing around with the Google Cardboard and reading and watching some tutorials online. These are the keywords you are looking for if you are planning on building an AR app: [Unity](http://unity3d.com/es/), [Vuforia](https://www.qualcomm.com/products/vuforia), [Google Cardboard](https://www.google.com/get/cardboard/).
+
+- Unity is a cross-platform game engine developed by Unity Technologies and used to develop video games for PC, consoles, mobile devices and websites. First announced only for OS X, at Apple's Worldwide Developers Conference in 2005, it has since been extended to target more than fifteen platforms. It is now the default software development kit (SDK) for the Wii U. **And**, now it is [available on Linux](http://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/) as well! 
+
+- Vuforia is an Augmented Reality Software Development Kit (SDK) for mobile devices that enables the creation of Augmented Reality applications. It uses Computer Vision technology to recognize and track planar images (Image Targets) and simple 3D objects, such as boxes, in real-time. This image registration capability enables developers to position and orient virtual objects, such as 3D models and other media, in relation to real world images when these are viewed through the camera of a mobile device. The virtual object then tracks the position and orientation of the image in real-time so that the viewer’s perspective on the object corresponds with their perspective on the Image Target, so that it appears that the virtual object is a part of the real world scene.
+
+The Vuforia SDK supports a variety of 2D and 3D target types including "markerless" Image Targets, 3D Multi-Target configurations, and a form of addressable Fiduciary Marker known as a Frame Marker. Additional features of the SDK include localized Occlusion Detection using ‘Virtual Buttons’, runtime image target selection, and the ability to create and reconfigure target sets programmatically at runtime.
+
+Vuforia provides Application Programming Interfaces (API) in C++, Java, Objective-C, and the .Net languages through an extension to the Unity game engine. In this way, the SDK supports both native development for iOS and Android while also enabling the development of AR applications in Unity that are easily portable to both platforms. AR applications developed using Vuforia are therefore compatible with a broad range of mobile devices including the iPhone ( 4/4S ), iPad, and Android phones and tablets running Android OS version 2.2 or greater and an ARMv6 or 7 processor with FPU (Floating Point Unit) processing capabilities.
+
+- Google Cardboard is a virtual reality (VR) and augmented reality (AR) platform developed by Google for use with a fold-out cardboard mount for a mobile phone. It is intended as a low-cost system to encourage interest and development in VR and AR applications. It was created by David Coz and Damien Henry, Google engineers at the Google Cultural Institute in Paris, in their 20% "Innovation Time Off", and was introduced at the Google I/O 2014 developers conference for Android devices.
+
+Yup, you got that right, those descriptions were copy-pasted from Wikipedia. But let me show you what you can do combining these amazing technologies. I made a video tutorial, but the main steps for building this kind of apps are:
+
+1. Define the images you want to scan and the 3D objects or videos you want to display in Augmented Reality.
+2. Install the newest version of Unity.
+3. Create a Vuforia account at [https://developer.vuforia.com/](https://developer.vuforia.com/ )
+4. Create a dataset of targets with your images and download it.
+5. Download Vuforia SDK.
+6. Import your packages into Unity.
+7. Replace the regular camera in the scene with an AR camera.
+8. Place the targets and their contents to be displayed.
+9. Compile
+10. Enjoy!
+
+And here is the tutorial:
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/UFSauxgqSUs' frameborder='0' allowfullscreen></iframe></div>
+
+As you can see, you can write an entire AR app without writing a single line of code. So you can imagine how powerful these tools become when you start writing your own scripts.
+
+You can download my ["squirrel-travolta" app](../static/blog/img/posts/3/squirrel.apk) and test it by scanning the following image:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/squirrel.jpg">
+    <img  src="../static/blog/img/posts/3/squirrel.jpg">
+</a>
+
+You can also download the [app I made for my university](../static/blog/img/posts/3/utbm.apk) and test it on the following images:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/utbm1.jpg">
+    <img  src="../static/blog/img/posts/3/utbm1.jpg">
+</a>
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/utbm2.jpg">
+    <img  src="../static/blog/img/posts/3/utbm2.jpg">
+</a>
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/utbm3.jpg">
+    <img  src="../static/blog/img/posts/3/utbm3.jpg">
+</a>
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/utbm4.jpg">
+    <img  src="../static/blog/img/posts/3/utbm4.jpg">
+</a>
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/3/utbm5.jpg">
+    <img  src="../static/blog/img/posts/3/utbm5.jpg">
+</a>
+
+If you have any questions, feel free to contact me. My video tutorial focuses on embedding a video inside an Augmented Reality app, but it is also very easy to do it with 3D models or animations. Just ask! ;)
+
+And as for Facebook's Oculus Rift, I am still very curious to know what makes it so expensive and why it is so hyped right now. I do not think it is going to be a success because of its price, but only time will tell. Only one thing is for sure: whether you are catching them all, taking memes to the Augmented Reality world, or enjoying <del>3D Porn</del> the Oculus Rift, you know for a fact that Augmented Reality and Virtual Reality are here to stay.
+
+Oh, and here is a funny blooper of me struggling with Windows while recording the tutorial:
+
+<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed/nO_tL87sico' frameborder='0' allowfullscreen></iframe></div>
+
