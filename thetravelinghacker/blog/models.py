@@ -15,3 +15,12 @@ class Post(models.Model):
             title=self.title,
             timestamp=self.timestamp,
         )
+
+
+class Reader(models.Model):
+    email = models.EmailField(max_length=100)
+
+    def __unicode__(self):
+        return "{email)".format(
+            timestamp=self.email,
+        )
