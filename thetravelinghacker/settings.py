@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'django_markdown',
     'disqus',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (

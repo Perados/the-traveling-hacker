@@ -6,6 +6,7 @@ django==1.8.4
 django_extensions
 django_markdown
 django-disqus
+djangorestframework
 iniparse==0.4
 ipdb==0.8.1
 IPy==0.81
