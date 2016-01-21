@@ -16,5 +16,29 @@
         </div>
     </form>
 
-<div>{{ test }}</div>
+    <div>{{ test }}</div>
+
+    <div id="content" ng-show="appLaunched">
+        <div class="wrapper">
+            <div id="ribbits" class="panel">
+                <h1>{{ user.name }}</h1>
+                <div class="ribbitWrapper">
+                    <img class="avatar" src="{{ user.avatar }}">
+                    <span class="name">@{{ user.screen_name }}</span>
+                    <p>
+                        {{ user.tweets}} Tweets<span class="spacing">{{ user.followers}} Followers</span><span class="spacing">{{ user.following}} Following</span><br>
+                         {{ user.description }}<a href="{{ user.url }}">{{ user.url }}</a>
+                    </p>
+                </div>
+            </div>
+            <div class="panel" ng-repeat="tweet in tweets">
+                <h1>Tweet retweeted {{ tweet.retweets }} times</h1>
+                <div class="ribbitWrapper">
+                    <p>
+                        {{ tweet.text }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

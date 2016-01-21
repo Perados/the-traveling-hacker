@@ -9,11 +9,21 @@ angular.module('myApp.twitter', ['ngRoute'])
   });
 }])
 
-.controller('TwitterCtrl', ['$scope', function($scope) {
+.controller('TwitterCtrl', ['$scope', '$http', function($scope, $http) {
   $scope.handle = ''
-  $scope.test = ''
+  $scope.loading = ''
+  $scope.appLaunched = false
+  $scope.user = {}
+  $scope.tweets = {}
 
   $scope.go = function(handle){
-    $scope.test = 'The handle is: ' + handle
+    $scope.loading = 'This handle is being loaded: ' + handle
+    $http.get('/search-handle?handle='+handle).success(function(data) {
+      $scope.user = data.user
+      $scope.tweets = data.tweets
+
+      $scope.loading = ''
+      $scope.appLaunched = true
+    })
   }
 }]);
