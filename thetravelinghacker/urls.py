@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework import routers
+from thetravelinghacker.twitter.views import TwitterUserViewSet
+
 from thetravelinghacker.blog.models import Post
+
 
 admin.autodiscover()
 
+router = routers.DefaultRouter()
+router.register(r'^twitter-users', TwitterUserViewSet, base_name='TwitterUsers')
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'thetravelinghacker.blog.views.home', name='home'),
@@ -30,6 +36,7 @@ urlpatterns = [
     url(r'^subscribe', 'thetravelinghacker.blog.views.subscribe', name='subscribe'),
     url(r'^search-handle', 'thetravelinghacker.twitter.views.search_handle', name='search-handle'),
     url(r'^twitter', 'thetravelinghacker.twitter.views.home', name='home'),
+    url(r'^api/', include(router.urls, namespace='api')),
     url(r'^markdown/', include('django_markdown.urls')),
 ]
 
