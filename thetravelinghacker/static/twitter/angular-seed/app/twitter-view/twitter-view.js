@@ -13,14 +13,11 @@ angular.module('myApp.twitter', ['ngRoute'])
   $scope.handle = ''
   $scope.loading = ''
   $scope.appLaunched = false
-  $scope.user = {}
-  $scope.tweets = {}
 
   $scope.go = function(handle){
     $scope.loading = 'This handle is being loaded: ' + handle
-    $http.get('/search-handle?handle='+handle).success(function(data) {
-      $scope.user = data.user
-      $scope.tweets = data.tweets
+    $http.get('/api/twitter-users/'+handle+'/').success(function(data) {
+      $scope.data = data
 
       $scope.loading = ''
       $scope.appLaunched = true

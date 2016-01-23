@@ -63,10 +63,10 @@ def search_handle(handle):
 
     user_reputation = calculate_reputation(user)
 
-    new_tweets = []
+    recent_tweets = []
 
     for tweet in tweets:
-        new_tweets.append(Tweet(
+        recent_tweets.append(Tweet(
             date=tweet.created_at,
             retweets_count=tweet.retweet_count,
             text=tweet.text,
@@ -82,7 +82,8 @@ def search_handle(handle):
         followings_count=user.friends_count,
         url=user.url,
         reputation=user_reputation,
-        tweets=new_tweets,
+        tweets_count=user.statuses_count,
+        recent_tweets=recent_tweets,
     )
     return new_user
     # return HttpResponse(json.dumps(response))

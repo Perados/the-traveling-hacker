@@ -26,7 +26,8 @@ class TwitterUserSerializer(serializers.Serializer):
     followings_count = serializers.IntegerField()
     url = serializers.URLField(max_length=1000)
     reputation = serializers.IntegerField()
-    tweets = TweetSerializer(many=True)
+    tweets_count = serializers.IntegerField()
+    recent_tweets = TweetSerializer(many=True)
 
     def create(self, validated_data):
         return TwitterUser(id=None, **validated_data)

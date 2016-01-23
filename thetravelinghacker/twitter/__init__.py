@@ -20,6 +20,7 @@ class TwitterUser(object):
                 'followings_count',
                 'url',
                 'reputation',
-                'tweets',
+                'tweets_count',
+                'recent_tweets',
         ):
             setattr(self, field, kwargs.get(field, None))
