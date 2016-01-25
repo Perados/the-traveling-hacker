@@ -1,0 +1,26 @@
+<ges version='0.1'>
+  <project properties='properties;' metadatas='metadatas, name=(string)&quot;New\ Project&quot;, author=(string)&quot;Diego\ Mora\ Cespedes&quot;, render-scale=(double)100, format-version=(string)0.1;'>
+    <encoding-profiles>
+      <encoding-profile name='pitivi-profile' description='Pitivi encoding profile' type='container' preset-name='mp4mux' format='video/quicktime, variant=(string)iso' >
+        <stream-profile parent='pitivi-profile' id='0' type='video' presence='1' format='video/x-dirac' preset-name='schroenc' restriction='video/x-raw, width=(int)1920, height=(int)1080, framerate=(fraction)30000/1001, pixel-aspect-ratio=(fraction)1/1, format=(string)I420' pass='0' variableframerate='0' />
+        <stream-profile parent='pitivi-profile' id='1' type='audio' presence='1' format='audio/mpeg, mpegversion=(int)1, layer=(int)3, rate=(int){ 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 }, channels=(int)[ 1, 2 ]' preset-name='lamemp3enc' restriction='audio/x-raw, channels=(int)2, rate=(int)44100' />
+      </encoding-profile>
+    </encoding-profiles>
+    <ressources>
+      <asset id='file:///home/diego/Desktop/diego/unity/travolta.mp4' extractable-type-name='GESUriClip' properties='properties, supported-formats=(int)4, duration=(guint64)168502000000;' metadatas='metadatas, video-codec=(string)&quot;H.264\ /\ AVC&quot;, bitrate=(uint)1900029, encoder=(string)Lavf56.40.101, container-format=(string)&quot;ISO\ MP4/M4A&quot;;' />
+    </ressources>
+    <timeline properties='properties, auto-transition=(boolean)true, snapping-distance=(guint64)25599905;' metadatas='metadatas, duration=(guint64)7395732298;'>
+      <track caps='video/x-raw(ANY)' track-type='4' track-id='0' properties='properties, async-handling=(boolean)false, message-forward=(boolean)true, caps=(string)&quot;video/x-raw\(ANY\)&quot;, restriction-caps=(string)&quot;video/x-raw\,\ width\=\(int\)1920\,\ height\=\(int\)1080\,\ framerate\=\(fraction\)30000/1001&quot;, mixing=(boolean)true;' metadatas='metadatas;'/>
+      <track caps='audio/x-raw(ANY)' track-type='2' track-id='1' properties='properties, async-handling=(boolean)false, message-forward=(boolean)true, caps=(string)&quot;audio/x-raw\(ANY\)&quot;, restriction-caps=(string)&quot;audio/x-raw\,\ format\=\(string\)S32LE\,\ channels\=\(int\)2\,\ rate\=\(int\)44100\,\ layout\=\(string\)interleaved&quot;, mixing=(boolean)true;' metadatas='metadatas;'/>
+      <layer priority='0' properties='properties, auto-transition=(boolean)true;' metadatas='metadatas, volume=(float)1, video::name=(string)&quot;video\ 0&quot;, audio::name=(string)&quot;audio\ 0&quot;;'>
+        <clip id='0' asset-id='file:///home/diego/Desktop/diego/unity/travolta.mp4' type-name='GESUriClip' layer-priority='0' track-types='6' start='0' duration='7395732298' inpoint='59805025531' rate='0' properties='properties, name=(string)uriclip6, mute=(boolean)false, is-image=(boolean)false;' >
+          <source track-id='0' children-properties='properties, alpha=(double)1, height=(int)1080, posx=(int)0, posy=(int)0, width=(int)1920;'>
+            <binding type='direct' source_type='interpolation' property='alpha' mode='1' track_id='0' values =' 59805025531:1  67200757829:1 '/>
+          </source>
+        </clip>
+      </layer>
+      <groups>
+      </groups>
+    </timeline>
+</project>
+</ges>

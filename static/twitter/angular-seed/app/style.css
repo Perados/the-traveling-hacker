@@ -1,0 +1,22 @@
+* {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #3F3E3D;
+}
+.panel-tth > .panel-info {
+  border-color: #5bc0de;
+}
+.panel-tth > .panel-info > .panel-heading {
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  float: left;
+}
+.tweet-body {
+  padding: 15px;
+}
+.loading {
+  text-align: center;
+}

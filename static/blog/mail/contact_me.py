@@ -26,6 +26,3 @@ mail($to,$email_subject,$email_body,$headers);
 return true;			
 ?>
 '''
-import ipdb
-
-ipdb.set_trace()

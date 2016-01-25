@@ -9,6 +9,13 @@ body {
   font-size: 20px;
   color: #404040;
 }
+.fill {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-position: center;
+  background-size: cover;
+}
 p {
   line-height: 1.5;
   margin: 30px 0;
@@ -17,7 +24,7 @@ p a {
   text-decoration: underline;
 }
 
-.read-full-article {
+.read-full-post{
   text-align: right;
   text-decoration: none;
   color: #269abc;
@@ -148,7 +155,7 @@ hr.small {
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
-  margin-bottom: 50px;
+  position: relative;
 }
 .intro-header .site-heading,
 .intro-header .post-heading,
