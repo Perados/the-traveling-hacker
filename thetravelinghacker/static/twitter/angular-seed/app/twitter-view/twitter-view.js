@@ -11,15 +11,15 @@ angular.module('myApp.twitter', ['ngRoute'])
 
 .controller('TwitterCtrl', ['$scope', '$http', function($scope, $http) {
   $scope.handle = ''
-  $scope.loading = ''
+  $scope.loading = false
   $scope.appLaunched = false
 
   $scope.go = function(handle){
-    $scope.loading = 'This handle is being loaded: ' + handle
+    $scope.loading = true
+    $scope.handle = handle
     $http.get('/api/twitter-users/'+handle+'/').success(function(data) {
       $scope.data = data
-
-      $scope.loading = ''
+      $scope.loading = false
       $scope.appLaunched = true
     })
   }

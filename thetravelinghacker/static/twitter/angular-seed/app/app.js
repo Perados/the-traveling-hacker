@@ -4,7 +4,9 @@
 angular.module('myApp', [
   'ngRoute',
   'myApp.twitter',
-  'myApp.version'
+  'myApp.version',
+  'ngSanitize',
+  'ngtweet',
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/'});
