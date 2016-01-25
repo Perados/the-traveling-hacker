@@ -2,9 +2,11 @@ class Tweet(object):
     def __init__(self, **kwargs):
         for field in (
             'date',
+            'html_content',
+            'id',
+            'photo',
             'retweets_count',
             'text',
-            'photo',
         ):
             setattr(self, field, kwargs.get(field, None))
 
@@ -12,15 +14,15 @@ class Tweet(object):
 class TwitterUser(object):
     def __init__(self, **kwargs):
         for field in (
-                'name',
-                'screen_name',
-                'description',
-                'avatar',
-                'followers_count',
-                'followings_count',
-                'url',
-                'reputation',
-                'tweets_count',
-                'recent_tweets',
+            'avatar',
+            'description',
+            'followers_count',
+            'followings_count',
+            'name',
+            'recent_tweets',
+            'reputation',
+            'screen_name',
+            'tweets_count',
+            'url',
         ):
             setattr(self, field, kwargs.get(field, None))

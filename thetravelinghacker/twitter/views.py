@@ -61,32 +61,33 @@ def search_handle(handle):
     user = twitter_api.get_user(handle)
     tweets = twitter_api.user_timeline(user.id, count=10)
 
-    user_reputation = calculate_reputation(user)
+    user_reputation = calculate_reputation(user, twitter_api)
 
     recent_tweets = []
 
     for tweet in tweets:
         recent_tweets.append(Tweet(
             date=tweet.created_at,
+            html_content =twitter_api.get_oembed(tweet.id, hide_media=False).get("html"),
+            id=tweet.id,
+            photo=get_photo(tweet),
             retweets_count=tweet.retweet_count,
             text=tweet.text,
-            photo=get_photo(tweet),
         ))
 
     new_user = TwitterUser(
-        name=user.name,
-        screen_name=user.screen_name,
-        description=user.description,
         avatar=user.profile_image_url,
+        description=user.description,
         followers_count=user.followers_count,
         followings_count=user.friends_count,
-        url=user.url,
-        reputation=user_reputation,
-        tweets_count=user.statuses_count,
+        name=user.name,
         recent_tweets=recent_tweets,
+        reputation=user_reputation,
+        screen_name=user.screen_name,
+        tweets_count=user.statuses_count,
+        url=user.url,
     )
     return new_user
-    # return HttpResponse(json.dumps(response))
 
 def get_photo(tweet):
     """
@@ -99,12 +100,59 @@ def get_photo(tweet):
     except KeyError:
         return ''
 
-def calculate_reputation(user):
+def calculate_reputation(user, twitter_api):
     """
     Calculates a Twitter account reputation
     Takes a Twitter user as parameter
     Returns a reputation score (max 650)
     """
-    # TODO: Reputation algorithm
-    return 100
+    followers_count = user.followers_count
+    reputation = 0
+
+    if followers_count < 201:
+        followers = user.followers(count=200)
+        for follower in followers:
+            if follower.followers_count > 200:
+                reputation +=1
+    elif 200 < followers_count < 5001:
+        reputation = 200
+        reputation += (400 * (followers_count - 200)) / 4800
+    else:
+        reputation = 600
+        reputation += analyze_user(user)
+
+    return reputation
+
+def analyze_user(user):
+    """
+    Analyzes a user's tweets
+    Takes a Twitter user and the twitter_api object as parameters
+    Returns a score (max 50)
+    """
+    with open('thetravelinghacker/static/twitter/positive-words.txt', 'r')  as file:
+        positive_words = file.read().splitlines()
+    with open('thetravelinghacker/static/twitter/negative-words.txt', 'r')  as file:
+        negative_words = file.read().splitlines()
+
+    positive_words_count = 0
+    negative_words_count = 0
+
+    user_tweets = user.timeline(count=200, include_rts=1)
+
+    for tweet in user_tweets:
+
+        for positive_word in positive_words:
+            if positive_word in tweet.text:
+                positive_words_count += 1
+
+        for negative_word in negative_words:
+            if negative_word in tweet.text:
+                negative_words_count += 1
+
+    if positive_words_count != negative_words_count:
+        points = (50 * (positive_words_count-negative_words_count)) / (positive_words_count)
+    else:
+        points = 0
+
+    return points
 
