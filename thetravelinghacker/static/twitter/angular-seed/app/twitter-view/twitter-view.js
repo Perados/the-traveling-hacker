@@ -39,7 +39,6 @@ angular.module('myApp.twitter', ['ngRoute'])
     .error(function (data, status) {
       $scope.data = data;
       $scope.loading = false
-      $scope.handle = '';
     })
   };
 }]);
