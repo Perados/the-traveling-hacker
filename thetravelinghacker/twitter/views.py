@@ -146,7 +146,7 @@ def analyze_user(user):
 
     for tweet in user_tweets:
 
-        for word in tweet.text:
+        for word in tweet.text.split(' '):
             if word in positive_words:
                 positive_words_count += 1
             elif word in negative_words:
@@ -155,9 +155,8 @@ def analyze_user(user):
                 pass
 
     if positive_words_count != negative_words_count:
-        points = (50 * (positive_words_count-negative_words_count)) / (positive_words_count)
+        points = (50 * (positive_words_count-negative_words_count)) / (positive_words_count+negative_words_count)
     else:
         points = 0
-
     return points
 
