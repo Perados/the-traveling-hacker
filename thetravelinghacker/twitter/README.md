@@ -1,15 +1,15 @@
 # Twitter Reputation app
 
 For this project, the tools I used were:
-	- Python 3.4.3
-	- Django 1.8.4
-	- Django REST Framework 3.3.2 
-	- AngularJS 1.4.9
-	- Tweepy 3.2.0
+* Python 3.4.3
+* Django 1.8.4
+* Django REST Framework 3.3.2 
+* AngularJS 1.4.9
+* Tweepy 3.2.0
 
 ## The frontend
 
-I used AngularJS, HTML/CSS and Bootstrap for the frontend. Nothing too fancy, just an average single-page app. The interesting part about it is that it is integrated into a Django website, which was not very easy to do, but extremely rewarding experience. I was already planning on migrating the frontend of my personal website to Angular, and now I am convinced. Obviously, the frontend and the Django api are completely independent one from each other. An interesting lesson I learnt while working on this project is that it is not always a good practice to use existing templates or seeds. I used Angular-seed for the Angular app, and that is why it is a bit messy. I also used an HTML/CSS nightmare-template for displaying th Tweets' panels at the beginning, which I ended up replacing with clean Bootstrap.	
+I used AngularJS, HTML/CSS and Bootstrap for the frontend. Nothing too fancy, just an average single-page app. The interesting part about it is that it is integrated into a Django website, which was not very easy to do, but extremely rewarding experience. I was already planning on migrating the frontend of my personal website to Angular, and now I am convinced. Obviously, the frontend and the Django api are completely independent one from each other. An interesting lesson I learnt while working on this project is that it is not always a good practice to use existing templates or seeds. I used Angular-seed for the Angular app, and that is why it is a bit messy. I also used an HTML/CSS nightmare-template to display the Tweets' panels at the beginning, which I ended up replacing with clean Bootstrap.	
 
 ## Using Twitter's api
 
@@ -39,19 +39,19 @@ The rest of the points are gotten from the amount of followers the user has. If 
 points2 = (400 * number_of_followers) / 4800  
 
 
-### The user has more than 1000000 followers (650 points max)
+### The user has more than 5000 followers (650 points max)
 
 This kind of user gets automatically the 200 points from the first category and the 400 points from the second category.
-The 50 extra points he can get are based on the content of the user's Tweets. I used two files to measure if the content of a user is positive or negative. The positive file (https://github.com/jeffreybreen/twitter-sentiment-analysis-tutorial-201107/blob/master/data/opinion-lexicon-English/positive-words.txt) contains positive words, and the negative file (https://github.com/jeffreybreen/twitter-sentiment-analysis-tutorial-201107/blob/master/data/opinion-lexicon-English/negative-words.txt) contains negative words. We calculate the total of positive and negative words in the user's last 10 Tweets and we apply the following formula:
+The 50 extra points he can get are based on the content of his Tweets. I used two files to measure if the content of a user is positive or negative. The positive file (https://github.com/jeffreybreen/twitter-sentiment-analysis-tutorial-201107/blob/master/data/opinion-lexicon-English/positive-words.txt) contains positive words, and the negative file (https://github.com/jeffreybreen/twitter-sentiment-analysis-tutorial-201107/blob/master/data/opinion-lexicon-English/negative-words.txt) contains negative words. We calculate the total of positive and negative words in the user's last 10 Tweets and we apply the following formula:
 
-points3 = (50 * (positive_words_count-negative_words_count)) / (positive_words_count-negative_words) if positive_words_count != negative_words_count. Otherwise, the user gets 0 points.
+points3 = (50 * (positive_words_count - negative_words_count)) / (positive_words_count - negative_words) if positive_words_count != negative_words_count. Otherwise, the user gets 0 points.
 
 The user can get the extra 50 points only if there are only positive words in his last 10 Tweets. 
 
-It is a very simple algorithm, nothing compared to the TunkRank score (http://thenoisychannel.com/2009/01/13/a-twitter-analog-to-pagerank) which I tried to implement without much success. However, I was very surprised by how accurate my algorithm is. For instance, I only got a score of 28, which makes total sense, since I am not influential at all on Twitter, where I only have 66 followers as of 2016/01/26. I also tested my algorithm on the most influential people on Twitter: Katy Perry got a score of 583, Justin Bieber got 633 (I guess he got 33/50 on the last category because his tweets are always very pohsy). CNN got a score of 592, and I would be very surprised to see its score above 600, because most of the news contain negative words. Trump got a score of 650! Politicians, anybody?
+It is a very simple algorithm, nothing compared to the TunkRank score (http://thenoisychannel.com/2009/01/13/a-twitter-analog-to-pagerank) which I tried to implement without much success. However, I was very surprised by how accurate my algorithm is. For instance, I only got a score of 28, which makes total sense, since I am not influential at all on Twitter, where I only have 66 followers as of 2016/01/26. I also tested my algorithm on the most influential people on Twitter: Katy Perry got a score of 583, Justin Bieber got 633 (I guess he got 33/50 on the last category because his tweets are always very poshy). CNN got a score of 592, and I would be very surprised to see its score above 600, because most of the news contain negative words. Trump got a score of 650! Politicians, anybody?
 
-curl http://thetravelinghacker.io/api/twitter-users/dmoraces/
-curl http://thetravelinghacker.io/api/twitter-users/katyperry/
-curl http://thetravelinghacker.io/api/twitter-users/justinbieber/
-curl http://thetravelinghacker.io/api/twitter-users/CNN/
-curl http://thetravelinghacker.io/api/twitter-users/realDonaldTrump/
+* curl http://thetravelinghacker.io/api/twitter-users/dmoraces/
+* curl http://thetravelinghacker.io/api/twitter-users/katyperry/
+* curl http://thetravelinghacker.io/api/twitter-users/justinbieber/
+* curl http://thetravelinghacker.io/api/twitter-users/CNN/
+* curl http://thetravelinghacker.io/api/twitter-users/realDonaldTrump/
