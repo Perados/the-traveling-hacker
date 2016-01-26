@@ -20,19 +20,26 @@ angular.module('myApp.twitter', ['ngRoute'])
   $scope.toggleHideTweets = function() {
     $scope.hide = !$scope.hide;
     setTimeout(
+       // Yes... This is a despicable hack to fix Twitter's widget.
+       // And it works like a charm...
       function() {
         $scope.hide= !$scope.hide;
-      }, 500);
+      }, 10);
 
   };
 
   $scope.go = function(handle){
-    $scope.loading = true
-    $scope.handle = handle
+    $scope.loading = true;
+    $scope.handle = handle;
     $http.get('/api/twitter-users/'+handle+'/').success(function(data) {
-      $scope.data = data
+      $scope.data = data;
+      $scope.loading = false;
+      $scope.appLaunched = true;
+    })
+    .error(function (data, status) {
+      $scope.data = data;
       $scope.loading = false
-      $scope.appLaunched = true
+      $scope.handle = '';
     })
   };
 }]);
