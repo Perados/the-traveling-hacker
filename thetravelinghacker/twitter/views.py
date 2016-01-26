@@ -28,6 +28,8 @@ class TwitterUserViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        except tweepy.error.TweepError:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={"error": "User not found."})
         serializer = serializers.TwitterUserSerializer(instance=twitter_user)
         return Response(serializer.data)
 
@@ -49,7 +51,6 @@ def authentify_twitter():
     api = tweepy.API(auth)
     return api
 
-@csrf_exempt
 def search_handle(handle):
     """
     Filters data from Twitter api
@@ -58,7 +59,11 @@ def search_handle(handle):
     """
     twitter_api = authentify_twitter()
 
-    user = twitter_api.get_user(handle)
+    try:
+        user = twitter_api.get_user(handle)
+    except tweepy.error.TweepError:
+        raise
+
     tweets = twitter_api.user_timeline(user.id, count=10)
 
     user_reputation = calculate_reputation(user, twitter_api)
