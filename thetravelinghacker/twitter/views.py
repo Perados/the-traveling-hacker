@@ -59,7 +59,7 @@ def search_handle(handle):
     twitter_api = authentify_twitter()
 
     user = twitter_api.get_user(handle)
-    tweets = twitter_api.user_timeline(user.id, count=10)
+    tweets = twitter_api.user_timeline(user.id, count=20)
 
     user_reputation = calculate_reputation(user, twitter_api)
 

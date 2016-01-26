@@ -14,6 +14,18 @@ angular.module('myApp.twitter', ['ngRoute'])
   $scope.loading = false
   $scope.appLaunched = false
 
+  $scope.sortType = '-date';
+  $scope.hide = false;
+
+  $scope.toggleHideTweets = function() {
+    $scope.hide = !$scope.hide;
+    setTimeout(
+      function() {
+        $scope.hide= !$scope.hide;
+      }, 500);
+
+  };
+
   $scope.go = function(handle){
     $scope.loading = true
     $scope.handle = handle
@@ -22,5 +34,5 @@ angular.module('myApp.twitter', ['ngRoute'])
       $scope.loading = false
       $scope.appLaunched = true
     })
-  }
+  };
 }]);
