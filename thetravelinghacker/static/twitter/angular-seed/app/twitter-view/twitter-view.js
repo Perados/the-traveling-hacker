@@ -10,9 +10,9 @@ angular.module('myApp.twitter', ['ngRoute'])
 }])
 
 .controller('TwitterCtrl', ['$scope', '$http', function($scope, $http) {
-  $scope.handle = ''
-  $scope.loading = false
-  $scope.appLaunched = false
+  $scope.handle = '';
+  $scope.loading = false;
+  $scope.appLaunched = false;
 
   $scope.sortType = '-date';
   $scope.hide = false;
