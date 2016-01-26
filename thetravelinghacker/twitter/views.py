@@ -59,7 +59,7 @@ def search_handle(handle):
     twitter_api = authentify_twitter()
 
     user = twitter_api.get_user(handle)
-    tweets = twitter_api.user_timeline(user.id, count=20)
+    tweets = twitter_api.user_timeline(user.id, count=10)
 
     user_reputation = calculate_reputation(user, twitter_api)
 
@@ -137,17 +137,17 @@ def analyze_user(user):
     positive_words_count = 0
     negative_words_count = 0
 
-    user_tweets = user.timeline(count=200, include_rts=1)
+    user_tweets = user.timeline(count=10, include_rts=1)
 
     for tweet in user_tweets:
 
-        for positive_word in positive_words:
-            if positive_word in tweet.text:
+        for word in tweet.text:
+            if word in positive_words:
                 positive_words_count += 1
-
-        for negative_word in negative_words:
-            if negative_word in tweet.text:
+            elif word in negative_words:
                 negative_words_count += 1
+            else:
+                pass
 
     if positive_words_count != negative_words_count:
         points = (50 * (positive_words_count-negative_words_count)) / (positive_words_count)
