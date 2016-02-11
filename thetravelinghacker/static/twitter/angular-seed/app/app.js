@@ -7,6 +7,7 @@ angular.module('myApp', [
   'myApp.version',
   'ngSanitize',
   'ngtweet',
+  'ui.bootstrap'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/'});

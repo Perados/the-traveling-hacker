@@ -17,6 +17,12 @@ angular.module('myApp.twitter', ['ngRoute'])
   $scope.sortType = '-date';
   $scope.hide = false;
 
+  $scope.noPhotoChecked = false;
+  $scope.moreThanRetweetsChecked = false;
+  $scope.lessThanRetweetsChecked = false;
+  $scope.beforeDateChecked = false;
+  $scope.afterDateChecked = false;
+
   $scope.toggleHideTweets = function() {
     $scope.hide = !$scope.hide;
     setTimeout(
@@ -41,4 +47,68 @@ angular.module('myApp.twitter', ['ngRoute'])
       $scope.loading = false
     })
   };
+
+  $scope.customFilter = function(tweet) {
+    var returnTweet = true;
+    if ($scope.noPhotoChecked) {
+      if (tweet.photo == "") {
+        returnTweet = false;
+      }
+    }
+
+    if ($scope.moreThanRetweetsChecked) {
+      if (tweet.retweets_count > $scope.moreThanRetweets) {
+        returnTweet = false;
+      }
+    }
+
+    if ($scope.lessThanRetweetsChecked) {
+      if (tweet.retweets_count < $scope.lessThanRetweets) {
+        returnTweet = false;
+      }
+
+    }
+
+    if ($scope.beforeDateChecked) {
+      if (Date.parse(tweet.date) < Date.parse($scope.beforeDate)) {
+        returnTweet = false;
+      }
+    }
+    if ($scope.afterDateChecked) {
+      if (Date.parse(tweet.date) > Date.parse($scope.afterDate)) {
+        returnTweet = false;
+      }
+    }
+
+    if (returnTweet) {
+      return tweet;
+    }
+  };
+  $scope.maxDate = new Date();
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
+  $scope.open2 = function() {
+        $scope.popup2.opened = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+  $scope.popup2 = {
+    opened: false
+  };
+
 }]);

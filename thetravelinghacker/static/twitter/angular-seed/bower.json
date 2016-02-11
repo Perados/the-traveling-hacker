@@ -12,6 +12,8 @@
     "angular-mocks": "~1.4.0",
     "html5-boilerplate": "~5.2.0",
     "angular-sanitize": "~1.4.9",
-    "ngtweet": "~0.3.1"
+    "ngtweet": "~0.3.1",
+    "angular-bootstrap": "~1.1.2",
+    "ui.bootstrap": "~1.1.2"
   }
 }
