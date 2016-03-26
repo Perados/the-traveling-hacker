@@ -20,14 +20,14 @@
 
 {% block content %}
         <div>
-            <a>
-                <h2 class="post-title">
-                    {{ post.title }}
-                </h2>
-                <h3 class="post-subtitle">
-                    {{ post.subtitle }}
-                </h3>
-            </a>
+            <div class="post-preview">
+                    <h2 class="post-title">
+                        {{ post.title }}
+                    </h2>
+                    <h3 class="post-subtitle">
+                        {{ post.subtitle }}
+                    </h3>
+            </div>
             <p>
                 {{ post.body_text|markdown }}
             </p>
