@@ -237,12 +237,12 @@ hr.small {
   text-decoration: none;
   color: #0085a1;
 }
-.post-preview > a > .post-title {
+.post-preview > a > .post-title, .post-preview > .post-title {
   font-size: 30px;
   margin-top: 30px;
   margin-bottom: 10px;
 }
-.post-preview > a > .post-subtitle {
+.post-preview > a > .post-subtitle, .post-preview > .post-subtitle {
   margin: 0;
   font-weight: 300;
   margin-bottom: 10px;
