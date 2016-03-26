@@ -86,7 +86,13 @@
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
     <header class="intro-header" >
-        <div id="carousel-example-generic" class="carousel slide fill" data-ride="carousel">
+        <div id="tth-carousel" class="carousel slide fill" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                {% for i in 'xxxxxxxxxxxx' %}
+                    <li data-target="#tth-carousel" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.counter == 1 %}active{% endif %}"></li>
+                {% endfor %}
+            </ol>
             <!-- Wrapper for slides -->
             <div class="carousel-inner fill" role="listbox">
                 {% for i in 'xxxxxxxxxxxx' %}
@@ -94,7 +100,17 @@
                     </div>
                 {% endfor %}
             </div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#tth-carousel" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#tth-carousel" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
         </div>
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
