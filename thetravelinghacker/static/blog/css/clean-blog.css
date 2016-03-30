@@ -20,11 +20,8 @@ p {
   line-height: 1.5;
   margin: 30px 0;
 }
-p a {
-  text-decoration: underline;
-}
 
-.read-full-post{
+.read-full-post {
   text-align: right;
   text-decoration: none;
   color: #269abc;
@@ -41,7 +38,7 @@ h6 {
   font-weight: 800;
 }
 a {
-  color: #404040;
+  color: #269abc;
 }
 a:hover,
 a:focus {
