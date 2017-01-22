@@ -1,0 +1,687 @@
+Monitoring your Uber prices  
+From a tiny ETL using Python and Uber's public API to data visualization using
+D3.js
+
+Have you ever wondered how your Uber prices evolve throughout the day, week,
+month or even year?  
+You might have already noticed that prices can go from _"Awesome, that's cheap,
+I love this app!"_ to _"Oh hell no! I ain't paying for that sh*t!"_ in a matter
+of minutes? This is because of Uber's surge: fare rates automatically increase,
+when the taxi demand is higher than drivers around you.
+
+The Uber prices are surging to ensure reliability and availability for those
+who agree to pay a bit more. When the Uber prices are surging, it also
+encourages more drivers to get back on the road and be able to earn more money.
+Usually, the Uber surging only lasts for a few minutes, depending on the demand
+and the amount of available drivers in your area. Before, Uber used to show
+surge pricing rates in their app. However, that has changed (at least in Paris)
+and nowadays you can feel the surge, but you cannot see it anymore, like the
+Force...
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/4/the-force.gif">
+    <img  src="../static/blog/img/posts/4/the-force.gif">
+</a>
+
+In this tutorial, I will show you how to use Python to **extract** data from
+Uber's public API, **transform** it, and **load** it into a csv file that will
+be read by D3.js for visualization.
+
+
+## Getting a Personal Access Token
+
+First, you need to create an Uber app. Go to your
+[developer dashboard](https://developer.uber.com/dashboard/) and click on
+_NEW APP_. Pick the _Rides API_, give your app a name and a description,
+agree to the terms of use and click on _CREATE_.
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/4/register_a_new_app.png">
+    <img  src="../static/blog/img/posts/4/register_a_new_app.png">
+</a>
+
+
+Now that you have access to your app, you need to give it access to your
+profile: go to _AUTHORIZATIONS_ and under _REDIRECT_URL_ put
+_http://localhost_ and under _PRIVACY POLICY URL_ put any url to your app's
+privacy policy, something like this: [_https://gist.github.com/Perados/f8c231151c67e8a02b75b2a4b2967268_](https://gist.github.com/Perados/f8c231151c67e8a02b75b2a4b2967268),
+although any url would work. You will not use any of these but we still need
+to fill them. Finally, under _GENERAL SCOPES_ pick only _profile_ and click
+on _SAVE_.
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/4/authorizations.png">
+    <img  src="../static/blog/img/posts/4/authorizations.png">
+</a>
+
+The next thing you need to do is to get a Personal Access Token. Since you
+are going to access your own data, you do not need to configure anything else
+nor bother with Oauth 2. Under _TEST WITH A PERSONAL ACCESS TOKEN_, click
+on _GENERATE A NEW ACCESS TOKEN_. Keep this access token in a safe place and
+do not share it with anybody.
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/4/settings.png">
+    <img  src="../static/blog/img/posts/4/settings.png">
+</a>
+
+Now you are ready to make authenticated calls to Uber's public API. For the
+next part of this tutorial, you will need your _CLIENT ID_, _CLIENT SECRET_
+and the _ACCESS TOKEN_ you just generated.
+
+## Extract, Transform and Load
+
+You will need to install two dependencies: **geopy** to get your adresses' gps
+coordinates and **uber_rides** to make api calls easily:
+
+<pre><code class="bash">$ pip install geopy uber_rides
+Successfully installed geopy-1.11.0 pyyaml-3.12 requests-2.12.5 uber-rides-0.3.1
+</code></pre>
+
+Now to the interesting part: the code.  
+The script will be composed of some dependencies imports, some global variables
+and 3 functions: the first one will instantiate an api client, the second one
+will get the product id you want to monitor, in my case, _uberX_ (Yes, that is
+how it is called in Paris...), and the third one will ask Uber for the price of
+your ride (**Extract**), adapt the output (**Transform**) and write it into a
+csv file (**Load**).
+
+
+### Configuration
+The configuration could go in a configuration file, a json or yaml for example,
+but in order to keep all the code in the same file, I decided to put the
+configuration at the top. Please, if other people is going to read your code,
+do not forget to use environment variables to hide your personal information.
+
+<pre><code class="python">#!/usr/bin/env python
+
+import csv
+import datetime
+import os
+
+from geopy.geocoders import GoogleV3
+from uber_rides.session import Session, OAuth2Credential
+from uber_rides.client import UberRidesClient
+
+# fill the following global variables with your values
+ACCESS_TOKEN = 'your_access_token'
+CLIENT_ID = 'your_client_id'
+CLIENT_SECRET = 'your_client_secret'
+PRODUCT_NAME = 'uberX'  # change this according to your city
+
+# define your addresses and give them a short name
+START_PLACE = ('short_name_1', 'start_address')
+END_PLACE = ('short_name_2', 'end_address')
+
+GEOLOCATOR = GoogleV3(timeout=5)  # we will use Google maps API
+
+# use the addresses to get the gps coordinates
+START_GEOCODE = GEOLOCATOR.geocode(START_PLACE[1])
+END_GEOCODE = GEOLOCATOR.geocode(END_PLACE[1])
+
+# define the ouput file and its headers
+OUTPUT_FILE_PATH = 'squirrel_monitoring.csv'
+CSV_HEADERS = [
+    'date',
+    'start_place',
+    'start_latitude',
+    'end_longitude',
+    'end_place',
+    'end_latitude',
+    'end_longitude',
+    'distance_estimation',
+    'duration_estimation',
+    'price',
+]
+
+...
+</code></pre>
+
+### Authenticate
+
+There is no magic here. You will just use the credentials you defined in the
+configuration part to instantiate an Uber API client.
+
+<pre><code class="python">def authenticate():
+    credentials = {
+        'access_token': ACCESS_TOKEN,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'expires_in_seconds': 2592000,  # Uber's default value
+        'grant_type': 'authorization_code',
+        'scopes': None
+    }
+    oauth2_credential = OAuth2Credential(**credentials)
+    session = Session(oauth2credential=oauth2_credential)
+    client = UberRidesClient(session)
+    return client
+
+...
+</code></pre>
+
+
+
+### Get the product id
+
+You could use the client to do this by hand and then hardcode the product id
+in the configuration, but I thought it was less confusing this way.  
+Uber has different products by city. For the sake of simplicity, we will only
+monitor one product for one ride in this tutorial, but you could go crazy and
+monitor all the products for 100 rides if you want...
+
+<pre><code class="python">def get_product_id(client, product_name):
+    response = client.get_products(
+        START_GEOCODE.latitude,
+        START_GEOCODE.longitude,
+    )
+    products = response.json.get('products')
+
+    for product in products:
+        if product['display_name'] == product_name:
+            product_id = product['product_id']
+            return product_id
+
+...
+</code></pre>
+
+### Write to csv
+
+This part performs the ETL. Again, there is no magic here, this function uses
+a client to estimate the price of a ride and write the formatted output into a
+csv file.
+
+<pre><code class="python">def write_to_csv(client, product_id):
+    file_exists = os.path.isfile(OUTPUT_FILE_PATH)
+
+    with open(OUTPUT_FILE_PATH, 'a') as f:
+        writer = csv.writer(f)
+
+        if not file_exists:  # this allows you to write the headers only once
+            writer.writerow(CSV_HEADERS)
+
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+        # extract
+        estimated_ride = client.estimate_ride(
+            product_id=product_id,
+            start_latitude=START_GEOCODE.latitude,
+            start_longitude=START_GEOCODE.longitude,
+            end_latitude=END_GEOCODE.latitude,
+            end_longitude=END_GEOCODE.longitude,
+        ).json
+
+        # transform
+        row = [
+            now,
+            START_PLACE[0],
+            START_GEOCODE.latitude,
+            START_GEOCODE.longitude,
+            END_PLACE[0],
+            END_GEOCODE.latitude,
+            END_GEOCODE.longitude,
+            estimated_ride['trip']['distance_estimate'],
+            estimated_ride['trip']['duration_estimate'],
+            estimated_ride['fare']['value'],
+        ]
+
+        # load
+        writer.writerow(row)
+
+...
+</code></pre>
+
+
+### The whole script
+
+I just added a main function here, which uses the functions you just defined
+in order to instantiate a client, get the product id, and write to the csv
+file.
+
+<pre><code class="python">#!/usr/bin/env python
+
+import csv
+import datetime
+import os
+
+from geopy.geocoders import GoogleV3
+from uber_rides.session import Session, OAuth2Credential
+from uber_rides.client import UberRidesClient
+
+# fill the following global variables with your values
+ACCESS_TOKEN = 'your_access_token'
+CLIENT_ID = 'your_client_id'
+CLIENT_SECRET = 'your_client_secret'
+PRODUCT_NAME = 'uberX'  # change this according to your city
+
+# define your addresses and give them a short name
+START_PLACE = ('short_name_1', 'start_address')
+END_PLACE = ('short_name_2', 'end_address')
+
+GEOLOCATOR = GoogleV3(timeout=5)  # we will use Google maps API
+
+# use the addresses to get the gps coordinates
+START_GEOCODE = GEOLOCATOR.geocode(START_PLACE[1])
+END_GEOCODE = GEOLOCATOR.geocode(END_PLACE[1])
+
+# define the ouput file and its headers
+OUTPUT_FILE_PATH = 'squirrel_monitoring.csv'
+CSV_HEADERS = [
+    'date',
+    'start_place',
+    'start_latitude',
+    'end_longitude',
+    'end_place',
+    'end_latitude',
+    'end_longitude',
+    'distance_estimation',
+    'duration_estimation',
+    'price',
+]
+
+
+def authenticate():
+    credentials = {
+        'access_token': ACCESS_TOKEN,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'expires_in_seconds': 9999999999,
+        'grant_type': 'authorization_code',
+        'scopes': None
+    }
+    oauth2_credential = OAuth2Credential(**credentials)
+    session = Session(oauth2credential=oauth2_credential)
+    client = UberRidesClient(session)
+    return client
+
+
+def get_product_id(client, product_name):
+    response = client.get_products(
+        START_GEOCODE.latitude,
+        START_GEOCODE.longitude,
+    )
+    products = response.json.get('products')
+
+    for product in products:
+        if product['display_name'] == product_name:
+            product_id = product['product_id']
+            return product_id
+
+
+def write_to_csv(client, product_id):
+    file_exists = os.path.isfile(OUTPUT_FILE_PATH)
+
+    with open(OUTPUT_FILE_PATH, 'a') as f:
+        writer = csv.writer(f)
+
+        if not file_exists:  # this allows you to write the headers only once
+            writer.writerow(CSV_HEADERS)
+
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+        # extract
+        estimated_ride = client.estimate_ride(
+            product_id=product_id,
+            start_latitude=START_GEOCODE.latitude,
+            start_longitude=START_GEOCODE.longitude,
+            end_latitude=END_GEOCODE.latitude,
+            end_longitude=END_GEOCODE.longitude,
+        ).json
+
+        # transform
+        row = [
+            now,
+            START_PLACE[0],
+            START_GEOCODE.latitude,
+            START_GEOCODE.longitude,
+            END_PLACE[0],
+            END_GEOCODE.latitude,
+            END_GEOCODE.longitude,
+            estimated_ride['trip']['distance_estimate'],
+            estimated_ride['trip']['duration_estimate'],
+            estimated_ride['fare']['value'],
+        ]
+
+        # load
+        writer.writerow(row)
+
+
+def main():
+    print('Starting script...')
+    client = authenticate()
+    product_id = get_product_id(client, PRODUCT_NAME)
+    write_to_csv(client, product_id)
+    print('Successfully wrote line into csv file...')
+
+
+if __name__ == '__main__':
+    main()
+
+</code></pre>
+
+Great! Now you can run the script and see what it does. I saved it under
+_squirrel_script.py_.
+
+<pre><code class="bash">$ python squirrel_script.py
+Starting script...
+Successfully wrote line into csv file...
+</code></pre>
+
+And here is what I got inside the csv file:
+
+<pre><code class="bash">date,start_place,start_latitude,end_longitude,end_place,end_latitude,end_longitude,distance_estimation,duration_estimation,price
+2017-01-13 23:55,home,48.84712099999999,2.3058490000000003,office,48.8340459,2.2648741,4.9567672,540,9.35
+</code></pre>
+
+Alright, now you need to find a way to launch the script periodically, so that
+your csv file will have enough rows to perform data visualization on it. My
+preferred way to do this is to use crontab on *NIX systems, but you can also
+do this in python using _while_ and _sleep_.
+
+## Automating the ETL
+
+### Using crontab on *NIX systems
+
+Crontab allows you to run a list of commands on a regular schedule. By default,
+your crontab is empty:
+
+<pre><code class="bash">$ crontab -l
+</code></pre>
+
+To add a scheduled command to your crontab, run:
+
+<pre><code class="bash">$ crontab -e
+</code></pre>
+
+This opens an editor. Enter the following line:
+
+<pre><code class="bash">*/5 * * * * python /absolute/path/to/your/script/squirrel_script.py
+</code></pre>
+
+This basically tells your system to run the _squirrel_script.py_ every 5
+minutes. If you wanna learn more about crontab,
+[RTFM](https://linux.die.net/man/1/crontab).
+
+Now, if you check your crontab again, your task should be there:
+
+<pre><code class="bash">$ crontab -l
+*/5 * * * * python /absolute/path/to/your/script/squirrel_script.py
+</code></pre>
+
+Your script will run every five minutes. If you did everything right, a new row
+should appear in your csv file every five minutes:
+
+<pre><code class="bash">date,start_place,start_latitude,end_longitude,end_place,end_latitude,end_longitude,distance_estimation,duration_estimation,price
+2017-01-13 23:55,home,48.84712099999999,2.3058490000000003,office,48.8340459,2.2648741,4.9567672,540,9.35
+2017-01-14 00:00,home,48.84712099999999,2.3058490000000003,office,48.8340459,2.2648741,4.9567672,540,9.44
+2017-01-14 00:05,home,48.84712099999999,2.3058490000000003,office,48.8340459,2.2648741,4.9567672,540,9.52
+</code></pre>
+
+
+## Visualization using D3.js
+Now that you are extracting data from Uber, you might want to check how that
+data looks like. There are many tools out there that allow you to visualize
+your data: [Chart.js](http://www.chartjs.org/),
+[Tableau](http://www.tableau.com/), [Bokeh](http://bokeh.pydata.org/),
+[D3.js](https://d3js.org/) and many others. I never used D3.js before, that is
+why I decided to use it for this article, because I love to learn new things.
+
+So what do you do when you have limited knowledge in JavaScript but you still
+want to use D3.js to make a real-time data visualization? You are right, you
+Google it! I found
+[this example](http://bl.ocks.org/d3noob/6bd13f974d6516f3e491)
+online and adapted it to our case. The following code is basically loading
+the csv file and reloading it every 5 minutes, which gives you a real-time
+data visualization of the file the python script is feeding every 5 minutes
+thanks to the cronjob.  
+You can name the following file _index.html_ for example:
+
+<pre><code class="js">&lt;!DOCTYPE html&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;style&gt; /* set the CSS */
+
+body { font: 12px Arial;}
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+&lt;/style&gt;
+&lt;body&gt;
+
+&lt;!-- load the d3.js library --&gt;
+&lt;script src=&quot;https://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+// Parse the date / time
+var parseDate = d3.time.format(&quot;%Y-%m-%d %H:%M&quot;).parse;
+
+// Set the ranges
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+
+// Define the axes
+var xAxis = d3.svg.axis().scale(x)
+    .orient(&quot;bottom&quot;).ticks(5);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient(&quot;left&quot;).ticks(5);
+
+// Define the line
+var valueline = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.price); });
+
+// Adds the svg canvas
+var svg = d3.select(&quot;body&quot;)
+    .append(&quot;svg&quot;)
+        .attr(&quot;width&quot;, width + margin.left + margin.right)
+        .attr(&quot;height&quot;, height + margin.top + margin.bottom)
+    .append(&quot;g&quot;)
+        .attr(&quot;transform&quot;,
+              &quot;translate(&quot; + margin.left + &quot;,&quot; + margin.top + &quot;)&quot;);
+
+// Get the data
+d3.csv(&quot;/squirrel_monitoring.csv&quot;, function(error, data) {
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.price = +d.price;
+    });
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.price; })]);
+
+    // Add the valueline path.
+    svg.append(&quot;path&quot;)
+        .attr(&quot;class&quot;, &quot;line&quot;)
+        .attr(&quot;d&quot;, valueline(data));
+
+    // Add the X Axis
+    svg.append(&quot;g&quot;)
+        .attr(&quot;class&quot;, &quot;x axis&quot;)
+        .attr(&quot;transform&quot;, &quot;translate(0,&quot; + height + &quot;)&quot;)
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append(&quot;g&quot;)
+        .attr(&quot;class&quot;, &quot;y axis&quot;)
+        .call(yAxis);
+
+});
+
+// Update data section
+function updateData() {
+    // Get the data again
+    d3.csv(&quot;/squirrel_monitoring.csv&quot;, function(error, data) {
+       	data.forEach(function(d) {
+	    	d.date = parseDate(d.date);
+	    	d.price = +d.price;
+	    });
+
+    	// Scale the range of the data again
+    	x.domain(d3.extent(data, function(d) { return d.date; }));
+	    y.domain([0, d3.max(data, function(d) { return d.price; })]);
+
+    // Select the section we want to apply our changes to
+    var svg = d3.select(&quot;body&quot;).transition();
+
+    // Make the changes
+        svg.select(&quot;.line&quot;)   // change the line
+            .duration(750)
+            .attr(&quot;d&quot;, valueline(data));
+        svg.select(&quot;.x.axis&quot;) // change the x axis
+            .duration(750)
+            .call(xAxis);
+        svg.select(&quot;.y.axis&quot;) // change the y axis
+            .duration(750)
+            .call(yAxis);
+
+    });
+}
+
+// This updates the data every 5 minutes
+var inter = setInterval(function() {
+    updateData();
+}, 1000*60*5);
+
+&lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+
+You need to serve the file over http for the reloading to work. You can do this
+easily using python:
+
+<pre><code class="bash">$ python -m http.server 8080
+Serving HTTP on 0.0.0.0 port 8082 (http://0.0.0.0:8080/) ...
+</code></pre>
+
+Now go to [_http://localhost:8082/index.html_](http://localhost:8082/index.html)
+on any web browser and if you did everything well, you should see something
+like this:
+
+<div id="chart" align="center" style="font-family: arial;"></div>
+
+Yes, the chart above is monitoring the Uber prices from my apartment to the
+office in Paris in real time.
+
+You can perform very basic analysis on what you see. Obviously, you will see
+prices going very high in the mornings when people are going to work and in the
+evenings when people are going back home.
+Now that you know how to automate ETL processes on public APIs, the sky is
+the limit. You can even extract tons of data from Uber's public API and
+use advanced Machine Learning on it like I did [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)...
+
+<!-- load the d3.js library -->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+// Parse the date / time
+var parseDate = d3.time.format("%Y-%m-%d %H:%M").parse;
+
+// Set the ranges
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+
+// Define the axes
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").ticks(5);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(5);
+
+// Define the line
+var valueline = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.price); });
+
+// Adds the svg canvas
+var svg = d3.select("#chart")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("/static/blog/csv/squirrel_monitoring.csv", function(error, data) {
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.price = +d.price;
+    });
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.price; })]);
+
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+});
+
+// Update data section
+function updateData() {
+
+    // Get the data again
+    d3.csv("/static/blog/csv/squirrel_monitoring.csv", function(error, data) {
+       	data.forEach(function(d) {
+	    	d.date = parseDate(d.date);
+	    	d.price = +d.price;
+	    });
+
+    	// Scale the range of the data again
+    	x.domain(d3.extent(data, function(d) { return d.date; }));
+	    y.domain([0, d3.max(data, function(d) { return d.price; })]);
+
+    // Select the section we want to apply our changes to
+    var svg = d3.select("body").transition();
+
+    // Make the changes
+        svg.select(".line")   // change the line
+            .duration(750)
+            .attr("d", valueline(data));
+        svg.select(".x.axis") // change the x axis
+            .duration(750)
+            .call(xAxis);
+        svg.select(".y.axis") // change the y axis
+            .duration(750)
+            .call(yAxis);
+
+    });
+}
+
+// This updates the data every 5 minutes
+var inter = setInterval(function() {
+    updateData();
+}, 1000*60*5);
+
+</script>

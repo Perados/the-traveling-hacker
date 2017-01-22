@@ -24,8 +24,23 @@ p {
 .read-full-post {
   text-align: right;
   text-decoration: none;
+  font-style: normal;
   color: #269abc;
   display: block;
+}
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
 }
 
 h1,

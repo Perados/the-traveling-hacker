@@ -15,6 +15,11 @@
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 
+    <!-- highlightjs -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/zenburn.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
     <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
@@ -148,12 +153,6 @@
                         </div>
                         <hr>
                     {% endfor %}
-                    <!-- Pager -->
-                    <ul class="pager">
-                        <li class="next">
-                            <a href="#">Older posts</a>
-                        </li>
-                    </ul>
                 {% endblock %}
             </div>
         </div>
@@ -216,7 +215,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">The Traveling Hacker 2016</p>
+                    <p class="copyright text-muted">The Traveling Hacker 2017</p>
                 </div>
             </div>
         </div>
