@@ -13,8 +13,11 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+import logging
+
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.db.utils import ProgrammingError
 from rest_framework import routers
 from thetravelinghacker.blog.views import (
     home as blog_home,
@@ -31,6 +34,8 @@ from thetravelinghacker.twitter.views import (
     home as twitter_home,
 )
 from thetravelinghacker.blog.models import Post
+
+logger = logging.getLogger('django')
 
 admin.autodiscover()
 
@@ -51,12 +56,16 @@ urlpatterns = [
     url(r'^markdown/', include('django_markdown.urls')),
 ]
 
-for post in Post.objects.all():
-    urlpatterns.append(
-        url(
-            r'^{}'.format(post.title.replace(' ', '-').lower(), posts, name='posts'),
-            posts,
-            {'post': post},
-            name='posts',
+try:
+    logger.info('There are "{}" posts in the database'.format(Post.objects.count()))
+    for post in Post.objects.all():
+        urlpatterns.append(
+            url(
+                r'^{}'.format(post.title.replace(' ', '-').lower(), posts, name='posts'),
+                posts,
+                {'post': post},
+                name='posts',
+            )
         )
-    )
+except ProgrammingError:
+    logger.info("The blog_post table is empty.")
