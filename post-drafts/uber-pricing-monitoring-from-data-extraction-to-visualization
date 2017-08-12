@@ -1,6 +1,6 @@
 Monitoring your Uber prices  
-From a tiny ETL using Python and Uber's public API to data visualization using
-D3.js
+From a tiny ETL using Python and Uber's public API to data visualization using D3.js
+
 
 Have you ever wondered how your Uber prices evolve throughout the day, week,
 month or even year?  
@@ -685,3 +685,4 @@ var inter = setInterval(function() {
 }, 1000*60*5);
 
 </script>
+
