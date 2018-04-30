@@ -1,12 +1,14 @@
 from django.db import models
-from django_markdown.models import MarkdownField
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
+
 
 
 class Post(models.Model):
     author = models.CharField(max_length=30)
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100)
-    body_text = MarkdownField()
+    body_text = MarkdownxField()
     timestamp = models.DateTimeField()
 
     def __unicode__(self):
@@ -15,6 +17,10 @@ class Post(models.Model):
             title=self.title,
             timestamp=self.timestamp,
         )
+
+    @property
+    def formatted_markdown(self):
+        return markdownify(self.body_text)
 
 
 class Reader(models.Model):

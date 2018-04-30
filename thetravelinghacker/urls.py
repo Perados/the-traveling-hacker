@@ -15,10 +15,13 @@ Including another URLconf
 """
 import logging
 
+from django.urls import path
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.db.utils import ProgrammingError
 from rest_framework import routers
+from markdownx import urls as markdownx
+
 from thetravelinghacker.blog.views import (
     home as blog_home,
     about_me,
@@ -42,7 +45,8 @@ admin.autodiscover()
 router = routers.DefaultRouter()
 router.register(r'^twitter-users', TwitterUserViewSet, base_name='TwitterUsers')
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin/', admin.site.urls),
+    url(r'^markdownx/', include(markdownx)),
     url(r'^$', blog_home, name='home'),
     url(r'^about-me$', about_me, name='about_me'),
     url(r'^posts/(?P<post_id>[0-9]+)$', posts, name='posts'),
@@ -52,8 +56,7 @@ urlpatterns = [
     url(r'^subscribe', subscribe, name='subscribe'),
     url(r'^search-handle', search_handle, name='search-handle'),
     url(r'^twitter/', twitter_home, name='twitter-home'),
-    url(r'^api/', include(router.urls, namespace='api')),
-    url(r'^markdown/', include('django_markdown.urls')),
+    url(r'^api/', include((router.urls, 'api'), namespace='api')),
 ]
 
 try:

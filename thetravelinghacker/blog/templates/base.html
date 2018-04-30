@@ -1,5 +1,4 @@
 {% load static from staticfiles %}
-{% load django_markdown %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -145,7 +144,7 @@
                                 </h3>
                             </a>
                             <p>
-                                {{ post.body_text|markdown|truncatewords:50 }}
+                                {{ post.formatted_markdown | safe |  truncatewords:50 }}
                                 <a href="{% url 'posts' post.id %}" class="read-full-post">Read full post</a>
                             </p>
 

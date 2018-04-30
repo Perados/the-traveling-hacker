@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import django_markdown.models
+import markdownx
 
 
 class Migration(migrations.Migration):
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('author', models.CharField(max_length=30)),
                 ('title', models.CharField(max_length=100)),
                 ('subtitle', models.CharField(max_length=100)),
-                ('body_text', django_markdown.models.MarkdownField()),
+                ('body_text', markdownx.models.MarkdownxField()),
                 ('timestamp', models.DateTimeField()),
             ],
         ),

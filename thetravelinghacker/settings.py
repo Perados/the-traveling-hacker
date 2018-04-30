@@ -41,21 +41,20 @@ INSTALLED_APPS = (
     'thetravelinghacker.presentations',
     'thetravelinghacker.twitter',
     'django_extensions',
-    'django_markdown',
     'disqus',
     'rest_framework',
+    'markdownx',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-)
+]
 
 ROOT_URLCONF = 'thetravelinghacker.urls'
 
@@ -133,7 +132,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/thetravelinghacker.log',
+            'filename': 'thetravelinghacker.log',
             'formatter': 'verbose',
         },
     },

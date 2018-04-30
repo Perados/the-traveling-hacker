@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
-{% load django_markdown %}
 {% load disqus_tags %}
 
 {% block header %}
@@ -29,7 +28,7 @@
                     </h3>
             </div>
             <p>
-                {{ post.body_text|markdown }}
+                {{ post.formatted_markdown | safe }}
             </p>
 
             <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
