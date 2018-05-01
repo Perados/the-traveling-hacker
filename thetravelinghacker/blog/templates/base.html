@@ -145,7 +145,7 @@
                             </a>
                             <p>
                                 {{ post.formatted_markdown | safe |  truncatewords:50 }}
-                                <a href="{% url 'posts' post.id %}" class="read-full-post">Read full post</a>
+                                <div class="read-full-post"><a href="{% url 'posts' post.id %}">Read full post</a></div>
                             </p>
 
                             <p class="post-meta">Posted by <a href="{% url 'about_me' %}">{{ post.author }}</a> on {{ post.timestamp }}</p>
