@@ -1,0 +1,175 @@
+Make Data Analysis Great Again
+Identifying millions of bots in Donald Trump's Twitter account
+
+
+Unless you live under a rock, you might know that Donald Trump's Twitter account is one of the most famous and influential accounts in the world, and that he uses it `very often`. Whether you like him or not, you cannot deny the fact that Donald Trump's Twitter account is incredibly powerful, and that he would not have won the elections without it. But what makes it so powerful? What are its particularities?
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/covfefe.jpeg">
+    <img  src="../static/blog/img/posts/5/covfefe.jpeg">
+</a>
+
+I decided to extract information about his account, his tweets, `and his followers`. Yes, his followers; it is very easy to get data about anybody on Twitter, and yes, it is very creepy. In this article, I will expose the results I found, but I will not describe in detail how I did it. I will write a separate technical article describing all the details on how to extract data using Twitter's API.
+
+So, let us get to it.
+
+## Data Analysis on Donald Trump's account
+
+
+### When was Donald Trump's Twitter account created?
+
+His account was created on `Wednesday, March 18, 2009 at 13:46:38`.
+
+### How many followers does he have?
+
+As of today (Saturday, May 19, 2018), he has `52 050 779 followers`.
+
+### How many times has he tweeted?
+
+He has tweeted (or retweeted) a total of `37 578 times`.
+
+### Which is his most liked tweet?
+
+With `607 116 likes` and `262 223 retweets`, this is his most liked tweet:
+
+<blockquote class="twitter-tweet tw-align-center" lang="en"><a href="https://twitter.com/realDonaldTrump/status/929511061954297857"></a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Not bad for a world leader, huh?
+
+### Which is his most retweeted tweet?
+
+With `573 688 likes` and `348 069 retweets`, this is his most retweeted tweet:
+
+<blockquote class="twitter-tweet tw-align-center" lang="en"><a href="https://twitter.com/realDonaldTrump/status/881503147168071680"></a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Really not bad for a world leader, huh?
+
+### What is his account's background image? 
+
+Yes, Twitter accounts have a background image, probably used in older versions of the app...
+
+<a class="fancybox" rel="group" href="https://pbs.twimg.com/profile_background_images/530021613/trump_scotland__43_of_70_cc.jpg">
+    <img  src="https://pbs.twimg.com/profile_background_images/530021613/trump_scotland__43_of_70_cc.jpg">
+</a>
+
+Yes... Donald Trump's Twitter account background is... a picture of [Trump Golf in Scotland](http://www.trumpgolfscotland.com/photo-gallery).
+
+### Which words does he use the most in his tweets?
+
+From his last `2825 tweets`, these are the words he uses the most:
+
+<iframe src="../static/blog/img/posts/5/most-used-words-table.html" frameborder='0' width="620" height="620"></iframe>
+
+Here is the bar chart representation:
+
+<iframe src="../static/blog/img/posts/5/most-used-words-bar-chart.html" frameborder='0' width="620" height="620"></iframe>
+
+And the word cloud, because word clouds are still cool, right? Right?!
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/most-used-words-wordcloud.png">
+    <img  src="../static/blog/img/posts/5/most-used-words-wordcloud.png">
+</a>
+
+
+By far, the words he uses the most are: `great`, `will` and `I`. Well, no surprise there, I guess...
+
+Now, let us take a look at his followers.
+
+## Data Analysis on Donald Trump's followers' accounts
+
+## Where do they come from?
+
+Users can add a location to their Twitter accounts, it is not very common though:
+
+<iframe src="../static/blog/img/posts/5/followers-locations-table.html" frameborder='0' width="620" height="620"></iframe>
+
+The feature not being very popular, the bar chart is disproportioned:
+
+<iframe src="../static/blog/img/posts/5/followers-locations-bar-chart.html" frameborder='0' width="620" height="620"></iframe>
+
+Let us get rid of the None value to visualize the rest better:
+
+<iframe src="../static/blog/img/posts/5/followers-locations-without-none-bar-chart.html" frameborder='0' width="620" height="620"></iframe>
+
+I was really not expecting to see Egypt, Nigeria, or even Bangladesh in the top 20!
+
+### Who are his most followed followers?
+
+<iframe src="../static/blog/img/posts/5/most-followed-followers-table.html" frameborder='0' width="620" height="620"></iframe>
+
+<iframe src="../static/blog/img/posts/5/most-followed-followers-bar-chart.html" frameborder='0' width="620" height="620"></iframe>
+
+It is funny to see that none of his followers have more followers than him.
+
+### How many of his followers are verified? 
+
+Only `50 374` of his followers are verified. This is normal, because in order to get verified, you need to be a famous brand or a celebrity. However, things start to get fishy in the next point.
+
+### How many of his followers seem fake (bots)?
+
+We all know there are tons of bots on Twitter, so I wanted to make a quick check on Donald Trump's Twitter account. Like I mentioned before, I extracted data from `50 941 578` Donald Trump's followers and injected it into a database (more on that on my next article, which will be much more technical).
+
+First, I took a look at his [followers page](https://twitter.com/realDonaldTrump/followers), and tried to find accounts that look fake. Just by looking at the first row of followers, you can recognize a pattern:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/bots.png">
+    <img  src="../static/blog/img/posts/5/bots.png">
+</a>
+
+`tricia`'s and `Zion`'s accounts look extremely fake, and their usernames follow the same pattern: they both finish in 8 digits: [tricia15588470](https://twitter.com/tricia15588470) and [Zion00290666](https://twitter.com/Zion00290666). By the way, since I started writing this part of the article, [tricia15588470's account](https://twitter.com/tricia15588470) has been flagged already:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/tricia.png">
+    <img  src="../static/blog/img/posts/5/tricia.png">
+</a>
+
+[Zion00290666's account](https://twitter.com/Zion00290666) has not been flagged yet, but it still looks extremely fake to me:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/zion.png">
+    <img  src="../static/blog/img/posts/5/zion.png">
+</a>
+
+These two accounts seem to be bots, but if you continue scrolling down Donald Trump's [followers page](https://twitter.com/realDonaldTrump/followers), you will find tens, even hundreds of accounts following this 8-digit pattern at the end of their usernames.
+
+Remember I said I injected all of his followers data into a database? Well, using a simple SQL query, I can count all  the accounts that follow the 8-digit pattern:
+
+`5 196 452` of Donald Trump's followers accounts follow this pattern. That is more than `10%` of all his followers.
+
+From these `5 196 452` accounts, `4 354 251` have less than 10 followers.
+
+Now, I am not saying these are bots, I am just saying these are bots.
+
+Also, do notice that this is just a tiny fraction of all the bot-like usernames in Donald Trump's followers list. Some other patterns are more difficult to express in a SQL query with regular expressions, because they are a little bit more random than the 8-digit one. For instance, you have:
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/bot1.png">
+    <img  src="../static/blog/img/posts/5/bot1.png">
+</a>
+
+and
+
+<a class="fancybox" rel="group" href="../static/blog/img/posts/5/bot2.png">
+    <img  src="../static/blog/img/posts/5/bot2.png">
+</a>
+
+User `赵宇` with username [sLFMiysIsdWxj6n](https://twitter.com/sLFMiysIsdWxj6n) and user `ساهر سعيد` with username [nZ9DC2knhReJL7d](https://twitter.com/nZ9DC2knhReJL7d) look pretty fake to me, but there is no clear pattern here, only the length: 15 characters, but that is not enough to identify a bot because real usernames could also be 15-character long. Maybe there is something about the small amount of vowels or something like that? If anyone has a nice regular expression that would match this kind of usernames, feel free to share it.
+
+### When were most of these accounts created?
+
+<iframe src="../static/blog/img/posts/5/bots-creation-dates-truncated-to-year-table.html" frameborder='0' width="200" height="420"></iframe>
+
+Most of them where created in 2017 and 2018, but we can also see that some `645 623` of them were created in 2016. Election-year, anybody?
+
+<iframe src="../static/blog/img/posts/5/bots-creation-dates-truncated-to-year-bar-chart.html" frameborder='0' width="620" height="620"></iframe>
+
+And here is the same data, truncated to month:
+
+<iframe src="../static/blog/img/posts/5/bots-creation-dates-truncated-to-month-table.html" frameborder='0' width="620" height="620"></iframe>
+
+<iframe src="../static/blog/img/posts/5/bots-creation-dates-truncated-to-month-bar-chart.html" frameborder='0' width="620" height="620"></iframe>
+
+## Some final thoughts
+
+Twitter is an extremely powerful tool, and Donald Trump knows how to use it. It was fun to get some insights from his Twitter account, especially the bots parts, but do not think he is the only one doing it, many politicians and stars like Barack Obama, Hillary Clinton, Kim Kardashian or Justin Bieber also have millions of fake followers.
+
+The millions of accounts identified in this article seem fake, but there is no deterministic way to be sure, you can never be 100% sure that a user is a bot, and that is why social networks are extremely careful when trying to ban fake accounts. You really do not want to start banning real accounts by mistake, users will get very mad, [Instagram tried in 2014 and failed miserably](https://www.theguardian.com/technology/2014/dec/19/instagram-purge-costs-celebrities-millions-of-followers).
+
+Also, I am not convinced that these huge companies want to get rid of all the bots, because they generate traffic like posts, likes, shares and comments, and these are key when trying to show shareholders that the company is doing well.
